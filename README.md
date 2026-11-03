@@ -7,6 +7,12 @@ Trabalho da disciplina de Gestão de Dados — Entregas 5 a 9, com documentaçã
 | Nome |
 |--- |
 | Levi Falcão | 
+| Jonatas Paixão | 
+| Saulo de Melo | 
+| Joabe Irlan  | 
+| Otávio vinícius | 
+| Moisés Oliveira |
+| Rafael Santos | 
 
 
 ## Descrição do sistema
