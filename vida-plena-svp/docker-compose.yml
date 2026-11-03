@@ -1,0 +1,78 @@
+# Sistema Vida Plena — ambiente de demonstração
+#   cp .env.example .env   (e troque os valores)
+#   docker compose up -d --build
+#   API: http://localhost:8000/docs
+name: vida-plena-svp
+
+x-svp-env: &svp-env
+  SVP_DATABASE_URL: postgresql://svp_api:${SVP_API_PASSWORD}@db:5432/svp
+  SVP_DW_DATABASE_URL: postgresql://svp_api:${SVP_API_PASSWORD}@db:5432/svp_dw
+  SVP_JWT_SECRET: ${SVP_JWT_SECRET}
+  SVP_CHAVE_CIFRA: ${SVP_CHAVE_CIFRA}
+  SVP_URL_PUBLICA: http://api:8000
+  SVP_PASTA_DOCUMENTOS: /data/documentos
+  SVP_SECRET__LABORATORIO_1_WEBHOOK: ${LAB_WEBHOOK_SECRET}
+  SVP_SECRET__LABORATORIO_1_API_TOKEN: ${LAB_API_TOKEN}
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      SVP_API_PASSWORD: ${SVP_API_PASSWORD}
+      SVP_ETL_PASSWORD: ${SVP_ETL_PASSWORD}
+      SVP_BI_PASSWORD: ${SVP_BI_PASSWORD}
+      SVP_CARREGAR_DEMO: "sim"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./infra/initdb:/docker-entrypoint-initdb.d:ro
+      - ./database:/svp/database:ro
+    ports:
+      - "127.0.0.1:5432:5432"          # só na máquina local, nunca exposto
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d svp"]
+      interval: 5s
+      retries: 30
+
+  api:
+    build: ./api
+    environment: *svp-env
+    volumes:
+      - documentos:/data/documentos
+    ports:
+      - "8000:8000"
+    depends_on:
+      db: { condition: service_healthy }
+
+  worker:
+    build: ./api
+    command: ["python", "-m", "app.worker"]
+    environment: *svp-env
+    depends_on:
+      db: { condition: service_healthy }
+
+  mock-lab:
+    build: ./api
+    command: ["uvicorn", "mock_lab.main:app", "--host", "0.0.0.0", "--port", "8001"]
+    environment:
+      LAB_API_TOKEN: ${LAB_API_TOKEN}
+      LAB_WEBHOOK_SECRET: ${LAB_WEBHOOK_SECRET}
+    ports:
+      - "8001:8001"
+
+  # carga do data warehouse: docker compose run --rm etl
+  etl:
+    build: ./api
+    command: ["python", "-m", "etl.carregar_dw", "--completo"]
+    environment:
+      SVP_ETL_DATABASE_URL: postgresql://svp_etl:${SVP_ETL_PASSWORD}@db:5432/svp
+      SVP_DW_ETL_DATABASE_URL: postgresql://svp_etl:${SVP_ETL_PASSWORD}@db:5432/svp_dw
+      SVP_ETL_CHAVE_PSEUDONIMO: ${SVP_ETL_CHAVE_PSEUDONIMO}
+    depends_on:
+      db: { condition: service_healthy }
+    profiles: ["jobs"]
+
+volumes:
+  pgdata:
+  documentos:
