@@ -110,7 +110,7 @@ Resposta `200`: `{"situacao": "processado", "id_solicitacao": 1, "id_documento":
 
 O desenho abaixo detalha a integração SVP ↔ laboratório; no desenho geral da arquitetura ([Entrega 8](../arquitetura-final/README.md)) ela aparece como as setas *pedidos* (Worker → Parceiros) e *webhooks* (Parceiros → API).
 
-![Fluxo da integração com o laboratório](../../diagrams/fluxo-integracao-laboratorio.png)
+[Fluxo da integração com o laboratório](../../diagrams/entrega-7-svp.pdf)
 
 1. O veterinário pede o envio (`POST /exames/1/enviar`). A API confere o perfil, se o pedido está `COLETADO` e se o tutor consentiu em compartilhar com laboratório (RN14).
 2. Na mesma transação, grava o evento `EXAME_SOLICITADO` em `integracao_evento` e responde `202`.

@@ -2,7 +2,7 @@
 
 O desenho final mostra o SVP em quatro camadas (usuários e parceiros, aplicação, dados, análise e cópias), com a fronteira TLS entre a internet e a aplicação; as siglas em cada caixa indicam qual entrega está presente ali.
 
-![Arquitetura de dados do SVP com as cinco entregas marcadas](../../diagrams/arquitetura-final.png)
+[Arquitetura de dados do SVP com as cinco entregas marcadas](../../diagrams/entrega-8-svp.pdf)
 
 Fonte do desenho: [`diagrams/gerar_diagramas.py`](../../diagrams/gerar_diagramas.py) (diagrama como código; gera SVG e PNG).
 

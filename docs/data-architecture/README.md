@@ -4,7 +4,7 @@ O SVP separa o dado em quatro lugares, cada um escolhido pelo uso: o banco opera
 
 Esta é a arquitetura de referência das Entregas 5 a 9. Ela parte da etapa 1 ([empresa e sistema](etapa-1-empresa-e-sistema.md)) e da [modelagem de dados](../data-modeling/README.md), e todas as decisões das entregas seguintes se apoiam nela.
 
-![Arquitetura de dados do SVP](../../diagrams/arquitetura-final.png)
+[Arquitetura de dados do SVP](../../diagrams/entrega-8-svp.pdf)
 
 ## Componentes
 
