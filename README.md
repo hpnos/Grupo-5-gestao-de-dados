@@ -4,11 +4,10 @@ Trabalho da disciplina de Gestão de Dados — Entregas 5 a 9, com documentaçã
 
 ## Integrantes
 
-| Nome | Responsabilidade |
-|---|---|
-| _preencher_ | _preencher_ |
-| _preencher_ | _preencher_ |
-| _preencher_ | _preencher_ |
+| Nome |
+|--- |
+| Levi Falcão | 
+
 
 ## Descrição do sistema
 
